@@ -1,21 +1,22 @@
 import { Heart, Instagram, Twitter } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function Footer() {
   return (
     <footer className="relative border-t border-border/60 bg-card/40 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 py-10 md:flex-row md:px-10">
-        <a href="#home" className="flex items-center gap-2">
+        <Link to="/" hash="home" className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--gradient-primary)] shadow-[var(--shadow-soft)]">
             <Heart className="h-4 w-4 fill-primary-foreground text-primary-foreground" />
           </span>
           <span className="font-serif text-xl font-medium tracking-tight">Secret Crush</span>
-        </a>
+        </Link>
 
         <nav className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-          <a href="#" className="transition-colors hover:text-primary">Privacy Policy</a>
-          <a href="#" className="transition-colors hover:text-primary">Terms of Use</a>
-          <a href="#faq" className="transition-colors hover:text-primary">FAQ</a>
-          <a href="#" className="transition-colors hover:text-primary">Contact</a>
+          <Link to="/privacy-policy" className="transition-colors hover:text-primary">Privacy Policy</Link>
+          <Link to="/terms-of-use" className="transition-colors hover:text-primary">Terms of Use</Link>
+          <Link to="/" hash="faq" className="transition-colors hover:text-primary">FAQ</Link>
+          <Link to="/" hash="waitlist" className="transition-colors hover:text-primary">Contact</Link>
         </nav>
 
         <div className="flex items-center gap-3">
