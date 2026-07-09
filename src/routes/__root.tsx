@@ -7,6 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { AuthProvider } from "@/lib/auth-context";
 
 import appCss from "../styles.css?url";
 
@@ -78,7 +79,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Secret Crush — Your Crush. Still a Secret." },
       { property: "og:description", content: "Add your crushes secretly. We'll only tell you if it's mutual." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://mysecretcrush.in" },
+      { property: "og:image", content: "https://mysecretcrush.in/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://mysecretcrush.in/og-image.png" },
       { name: "twitter:site", content: "@SecretCrush" },
     ],
     links: [
@@ -116,7 +122,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
