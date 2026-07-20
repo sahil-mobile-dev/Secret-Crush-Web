@@ -5,6 +5,18 @@ import { Footer } from "@/components/landing/Footer";
 import { FloatingHearts } from "@/components/landing/FloatingHearts";
 
 export const Route = createFileRoute("/privacy-policy")({
+  head: () => ({
+    meta: [
+      { title: "Privacy Policy — Secret Crush by ARCTURYN PRIVATE LIMITED" },
+      { name: "description", content: "Privacy Policy for Secret Crush app and website, operated by ARCTURYN PRIVATE LIMITED. Read about how we protect user privacy and confidentiality." },
+      { property: "og:title", content: "Privacy Policy — Secret Crush by ARCTURYN PRIVATE LIMITED" },
+      { property: "og:description", content: "Privacy Policy for Secret Crush app and website, operated by ARCTURYN PRIVATE LIMITED." },
+      { property: "og:url", content: "https://mysecretcrush.in/privacy-policy" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://mysecretcrush.in/privacy-policy" },
+    ],
+  }),
   component: PrivacyPolicyPage,
 });
 
@@ -39,12 +51,12 @@ function PrivacyPolicyPage() {
 
             <div className="space-y-8 text-sm leading-relaxed text-muted-foreground">
               <section>
-                <h2 className="text-lg font-semibold text-foreground mb-3">1. Introduction</h2>
+                <h2 className="text-lg font-semibold text-foreground mb-3">1. Introduction & Data Controller</h2>
                 <p>
-                  Welcome to Secret Crush. We understand that your privacy is of utmost importance,
-                  especially when it comes to personal feelings and relationships. This Privacy Policy
-                  explains how we collect, use, and protect your information when you use our website
-                  and mobile application.
+                  Welcome to Secret Crush. Secret Crush is a digital social platform owned and operated by <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong>, a technology company having its registered office at 411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054 ("Company", "Data Controller", "we", "us", or "our").
+                </p>
+                <p className="mt-2">
+                  We understand that your privacy is of utmost importance, especially when it comes to personal feelings and relationships. This Privacy Policy explains how ARCTURYN PRIVATE LIMITED collects, uses, processes, and protects your information when you access or use the Secret Crush website and mobile applications.
                 </p>
               </section>
 
@@ -124,8 +136,16 @@ function PrivacyPolicyPage() {
                 </p>
               </section>
 
-              <div className="pt-6 border-t border-border/40 text-xs text-muted-foreground text-center">
-                If you have any questions about this Privacy Policy, please contact us at privacy@secretcrush.app.
+              <div className="pt-6 border-t border-border/40 text-xs text-muted-foreground text-center space-y-1.5">
+                <p className="font-semibold text-foreground">
+                  Data Controller: ARCTURYN PRIVATE LIMITED
+                </p>
+                <p>
+                  411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054 | Tel: +91 9978333880
+                </p>
+                <p className="pt-1">
+                  If you have any questions about this Privacy Policy, please contact us at <a href="mailto:info@secretcrush.app" className="text-primary hover:underline">info@secretcrush.app</a>.
+                </p>
               </div>
             </div>
           </div>

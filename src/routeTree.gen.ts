@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ContactUsRouteImport } from './routes/contact-us'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminPendingRouteImport } from './routes/admin/pending'
@@ -27,9 +29,19 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactUsRoute = ContactUsRouteImport.update({
+  id: '/contact-us',
+  path: '/contact-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutUsRoute = AboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,7 +67,9 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
   '/admin': typeof AdminRouteWithChildren
+  '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
@@ -64,6 +78,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
+  '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
@@ -73,7 +89,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
   '/admin': typeof AdminRouteWithChildren
+  '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
@@ -84,7 +102,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about-us'
     | '/admin'
+    | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
@@ -93,6 +113,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about-us'
+    | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
@@ -101,7 +123,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about-us'
     | '/admin'
+    | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
@@ -111,7 +135,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutUsRoute: typeof AboutUsRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ContactUsRoute: typeof ContactUsRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   TermsOfUseRoute: typeof TermsOfUseRoute
 }
@@ -132,11 +158,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact-us': {
+      id: '/contact-us'
+      path: '/contact-us'
+      fullPath: '/contact-us'
+      preLoaderRoute: typeof ContactUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about-us': {
+      id: '/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof AboutUsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -186,7 +226,9 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutUsRoute: AboutUsRoute,
   AdminRoute: AdminRouteWithChildren,
+  ContactUsRoute: ContactUsRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   TermsOfUseRoute: TermsOfUseRoute,
 }

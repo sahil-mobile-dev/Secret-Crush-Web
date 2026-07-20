@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 
 const links = [
   { to: "/", hash: "home", label: "Home" },
+  { to: "/about-us", hash: "", label: "About Us" },
+  { to: "/contact-us", hash: "", label: "Contact" },
   { to: "/", hash: "how", label: "How It Works" },
-  { to: "/", hash: "privacy", label: "Privacy" },
+  { to: "/privacy-policy", hash: "", label: "Privacy" },
   { to: "/", hash: "faq", label: "FAQ" },
 ];
 

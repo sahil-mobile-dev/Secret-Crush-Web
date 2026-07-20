@@ -5,6 +5,18 @@ import { Footer } from "@/components/landing/Footer";
 import { FloatingHearts } from "@/components/landing/FloatingHearts";
 
 export const Route = createFileRoute("/terms-of-use")({
+  head: () => ({
+    meta: [
+      { title: "Terms of Use — Secret Crush by ARCTURYN PRIVATE LIMITED" },
+      { name: "description", content: "Terms of Use and Service Agreement for Secret Crush, owned and operated by ARCTURYN PRIVATE LIMITED." },
+      { property: "og:title", content: "Terms of Use — Secret Crush by ARCTURYN PRIVATE LIMITED" },
+      { property: "og:description", content: "Terms of Use and Service Agreement for Secret Crush, owned and operated by ARCTURYN PRIVATE LIMITED." },
+      { property: "og:url", content: "https://mysecretcrush.in/terms-of-use" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://mysecretcrush.in/terms-of-use" },
+    ],
+  }),
   component: TermsOfUsePage,
 });
 
@@ -39,11 +51,9 @@ function TermsOfUsePage() {
 
             <div className="space-y-8 text-sm leading-relaxed text-muted-foreground">
               <section>
-                <h2 className="text-lg font-semibold text-foreground mb-3">1. Agreement to Terms</h2>
+                <h2 className="text-lg font-semibold text-foreground mb-3">1. Agreement to Terms & Service Provider</h2>
                 <p>
-                  By accessing or using Secret Crush, you agree to be bound by these Terms of Use
-                  and all applicable laws and regulations. If you do not agree with any of these terms,
-                  you are prohibited from using or accessing this site.
+                  By accessing or using Secret Crush, you agree to be bound by these Terms of Use and all applicable laws and regulations. Secret Crush is owned and operated by <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong>, having its registered office at 411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054 ("Company", "we", "us", or "our"). If you do not agree with any of these terms, you are prohibited from using or accessing this site or service.
                 </p>
               </section>
 
@@ -102,14 +112,27 @@ function TermsOfUsePage() {
               <section>
                 <h2 className="text-lg font-semibold text-foreground mb-3">7. Limitation of Liability</h2>
                 <p>
-                  In no event shall Secret Crush or its creators be liable for any damages (including,
-                  without limitation, damages for loss of data, emotional distress, or business interruption)
-                  arising out of the use or inability to use the platform.
+                  In no event shall ARCTURYN PRIVATE LIMITED, Secret Crush, or its directors and officers be liable for any damages (including, without limitation, damages for loss of data, emotional distress, or business interruption) arising out of the use or inability to use the platform.
                 </p>
               </section>
 
-              <div className="pt-6 border-t border-border/40 text-xs text-muted-foreground text-center">
-                If you have questions regarding these Terms, please contact us at support@secretcrush.app.
+              <section>
+                <h2 className="text-lg font-semibold text-foreground mb-3">8. Governing Law & Jurisdiction</h2>
+                <p>
+                  These Terms of Use shall be governed by and construed in accordance with the laws of India. Any legal action, suit, or proceeding arising out of or relating to these Terms shall be subject to the exclusive jurisdiction of the courts located in Ahmedabad, Gujarat, India.
+                </p>
+              </section>
+
+              <div className="pt-6 border-t border-border/40 text-xs text-muted-foreground text-center space-y-1.5">
+                <p className="font-semibold text-foreground">
+                  Service Provider: ARCTURYN PRIVATE LIMITED
+                </p>
+                <p>
+                  411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054 | Tel: +91 9978333880
+                </p>
+                <p className="pt-1">
+                  If you have questions regarding these Terms, please contact us at <a href="mailto:info@secretcrush.app" className="text-primary hover:underline">info@secretcrush.app</a>.
+                </p>
               </div>
             </div>
           </div>
