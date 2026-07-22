@@ -121,7 +121,7 @@ function AboutUsPage() {
                   <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Official Email</div>
-                    <div className="font-semibold text-foreground mt-0.5">info@secretcrush.app</div>
+                    <div className="font-semibold text-foreground mt-0.5">info@mysecretcrush.in</div>
                   </div>
                 </div>
               </div>

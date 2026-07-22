@@ -123,8 +123,8 @@ function ContactUsPage() {
                 <div className="grid gap-2 sm:grid-cols-2 text-sm">
                   <div>
                     <span className="text-xs text-muted-foreground">General Support: </span>
-                    <a href="mailto:info@secretcrush.app" className="text-primary font-medium hover:underline">
-                      info@secretcrush.app
+                    <a href="mailto:info@mysecretcrush.in" className="text-primary font-medium hover:underline">
+                      info@mysecretcrush.in
                     </a>
                   </div>
                 </div>

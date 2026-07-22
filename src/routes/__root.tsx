@@ -129,7 +129,7 @@ const organizationSchema = {
     "@type": "ContactPoint",
     "telephone": "+91-9978333880",
     "contactType": "customer support",
-    "email": "info@secretcrush.app",
+    "email": "info@mysecretcrush.in",
     "areaServed": "IN",
     "availableLanguage": ["English", "Hindi", "Gujarati"]
   },

@@ -131,7 +131,7 @@ function TermsOfUsePage() {
                   411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054 | Tel: +91 9978333880
                 </p>
                 <p className="pt-1">
-                  If you have questions regarding these Terms, please contact us at <a href="mailto:info@secretcrush.app" className="text-primary hover:underline">info@secretcrush.app</a>.
+                  If you have questions regarding these Terms, please contact us at <a href="mailto:info@mysecretcrush.in" className="text-primary hover:underline">info@mysecretcrush.in</a>.
                 </p>
               </div>
             </div>
