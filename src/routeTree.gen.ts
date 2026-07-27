@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ContactUsRouteImport } from './routes/contact-us'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AppTermsOfUseRouteImport } from './routes/app/terms-of-use'
+import { Route as AppPrivacyPolicyRouteImport } from './routes/app/privacy-policy'
 import { Route as AdminPendingRouteImport } from './routes/admin/pending'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 
@@ -32,6 +35,11 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
 const ContactUsRoute = ContactUsRouteImport.update({
   id: '/contact-us',
   path: '/contact-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -54,6 +62,16 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AppTermsOfUseRoute = AppTermsOfUseRouteImport.update({
+  id: '/terms-of-use',
+  path: '/terms-of-use',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPrivacyPolicyRoute = AppPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => AppRoute,
+} as any)
 const AdminPendingRoute = AdminPendingRouteImport.update({
   id: '/pending',
   path: '/pending',
@@ -69,21 +87,27 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
   '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
   '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pending': typeof AdminPendingRoute
+  '/app/privacy-policy': typeof AppPrivacyPolicyRoute
+  '/app/terms-of-use': typeof AppTermsOfUseRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
+  '/app': typeof AppRouteWithChildren
   '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pending': typeof AdminPendingRoute
+  '/app/privacy-policy': typeof AppPrivacyPolicyRoute
+  '/app/terms-of-use': typeof AppTermsOfUseRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -91,11 +115,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about-us': typeof AboutUsRoute
   '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
   '/contact-us': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/terms-of-use': typeof TermsOfUseRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pending': typeof AdminPendingRoute
+  '/app/privacy-policy': typeof AppPrivacyPolicyRoute
+  '/app/terms-of-use': typeof AppTermsOfUseRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -104,32 +131,41 @@ export interface FileRouteTypes {
     | '/'
     | '/about-us'
     | '/admin'
+    | '/app'
     | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
     | '/admin/pending'
+    | '/app/privacy-policy'
+    | '/app/terms-of-use'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about-us'
+    | '/app'
     | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
     | '/admin/pending'
+    | '/app/privacy-policy'
+    | '/app/terms-of-use'
     | '/admin'
   id:
     | '__root__'
     | '/'
     | '/about-us'
     | '/admin'
+    | '/app'
     | '/contact-us'
     | '/privacy-policy'
     | '/terms-of-use'
     | '/admin/login'
     | '/admin/pending'
+    | '/app/privacy-policy'
+    | '/app/terms-of-use'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -137,6 +173,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutUsRoute: typeof AboutUsRoute
   AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
   ContactUsRoute: typeof ContactUsRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   TermsOfUseRoute: typeof TermsOfUseRoute
@@ -163,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/contact-us'
       fullPath: '/contact-us'
       preLoaderRoute: typeof ContactUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -192,6 +236,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/app/terms-of-use': {
+      id: '/app/terms-of-use'
+      path: '/terms-of-use'
+      fullPath: '/app/terms-of-use'
+      preLoaderRoute: typeof AppTermsOfUseRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/privacy-policy': {
+      id: '/app/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/app/privacy-policy'
+      preLoaderRoute: typeof AppPrivacyPolicyRouteImport
+      parentRoute: typeof AppRoute
     }
     '/admin/pending': {
       id: '/admin/pending'
@@ -224,10 +282,23 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface AppRouteChildren {
+  AppPrivacyPolicyRoute: typeof AppPrivacyPolicyRoute
+  AppTermsOfUseRoute: typeof AppTermsOfUseRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppPrivacyPolicyRoute: AppPrivacyPolicyRoute,
+  AppTermsOfUseRoute: AppTermsOfUseRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutUsRoute: AboutUsRoute,
   AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
   ContactUsRoute: ContactUsRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   TermsOfUseRoute: TermsOfUseRoute,

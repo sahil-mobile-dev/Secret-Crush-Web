@@ -25,9 +25,7 @@ export function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "backdrop-blur-xl bg-background/70 border-b border-border/60"
-          : "bg-transparent"
+        scrolled ? "backdrop-blur-xl bg-background/70 border-b border-border/60" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
@@ -53,7 +51,9 @@ export function Navbar() {
         </ul>
 
         <Button asChild variant="crush" size="pill">
-          <Link to="/" hash="waitlist">Join Waitlist</Link>
+          <Link to="/" hash="waitlist">
+            Join Waitlist
+          </Link>
         </Button>
       </nav>
     </header>

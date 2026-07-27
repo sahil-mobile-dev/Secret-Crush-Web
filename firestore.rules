@@ -106,6 +106,17 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // Contests rules
+    match /contests/{contestId} {
+      allow read: if true;
+      allow write: if isAdmin();
+      
+      match /rewards/{rewardId} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
+    }
+
     // App Config rules
     match /app_config/{document} {
       allow read: if isAuthenticated();

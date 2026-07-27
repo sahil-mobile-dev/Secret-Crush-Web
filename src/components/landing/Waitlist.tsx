@@ -88,9 +88,7 @@ export function Waitlist() {
 
             <div className="rounded-3xl border border-border/70 bg-card/80 p-7 shadow-[var(--shadow-card)] backdrop-blur-xl">
               <h3 className="font-serif text-2xl font-medium text-primary">Join the waitlist</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Get early access when we launch.
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">Get early access when we launch.</p>
 
               {submitted ? (
                 <div className="mt-6 rounded-2xl bg-[var(--gradient-soft)] p-6 text-center">
@@ -101,7 +99,12 @@ export function Waitlist() {
                 </div>
               ) : (
                 <form className="mt-6 space-y-3" onSubmit={handleSubmit}>
-                  <Field name="name" icon={<User className="h-4 w-4" />} placeholder="Your Name" required />
+                  <Field
+                    name="name"
+                    icon={<User className="h-4 w-4" />}
+                    placeholder="Your Name"
+                    required
+                  />
                   <div className="flex gap-2">
                     <div className="flex items-center gap-1 rounded-xl border border-input bg-background/80 px-3 text-sm text-muted-foreground">
                       <Phone className="h-3.5 w-3.5" />

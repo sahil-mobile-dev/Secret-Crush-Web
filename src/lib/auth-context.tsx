@@ -1,6 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User, signOut } from "firebase/auth";
-import { doc, onSnapshot, collection, query, limit, getDoc, getDocs, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  onSnapshot,
+  collection,
+  query,
+  limit,
+  getDoc,
+  getDocs,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
 export interface UserData {
@@ -32,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (firebaseUser) {
         const userDocRef = doc(db, "admins", firebaseUser.uid);
-        
+
         // Listen to real-time changes to the user document
         const unsubscribeDoc = onSnapshot(
           userDocRef,
@@ -79,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           (error) => {
             console.error("Error listening to user document:", error);
             setLoading(false);
-          }
+          },
         );
 
         return () => {

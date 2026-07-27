@@ -1,10 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
+import { createFileRoute } from "@tanstack/react-router";
 import { FloatingHearts } from "@/components/landing/FloatingHearts";
 
-export const Route = createFileRoute("/terms-of-use")({
+export const Route = createFileRoute("/app/terms-of-use")({
   head: () => ({
     meta: [
       { title: "Terms of Use — Secret Crush by ARCTURYN PRIVATE LIMITED" },
@@ -19,7 +16,7 @@ export const Route = createFileRoute("/terms-of-use")({
         content:
           "Terms of Use and Service Agreement for Secret Crush, owned and operated by ARCTURYN PRIVATE LIMITED.",
       },
-      { property: "og:url", content: "https://mysecretcrush.in/terms-of-use" },
+      { property: "og:url", content: "https://mysecretcrush.in/app/terms-of-use" },
     ],
     links: [{ rel: "canonical", href: "https://mysecretcrush.in/terms-of-use" }],
   }),
@@ -30,8 +27,7 @@ function TermsOfUsePage() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <FloatingHearts />
-      <Navbar />
-      <main className="relative pt-32 pb-24 md:pt-40 md:pb-32 px-6">
+      <main className="relative pt-8 pb-12 px-6">
         {/* Decorative blurred blobs */}
         <div
           className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
@@ -43,17 +39,7 @@ function TermsOfUsePage() {
         />
 
         <div className="relative mx-auto max-w-3xl">
-          {/* Back button */}
-          <div className="mb-8 animate-fade-up">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary hover:opacity-80 transition-opacity"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to Home
-            </Link>
-          </div>
-
-          <div className="animate-fade-up [animation-delay:100ms] rounded-3xl border border-border/60 bg-card/70 p-8 md:p-12 backdrop-blur shadow-[var(--shadow-card)]">
+          <div className="animate-fade-up rounded-3xl border border-border/60 bg-card/70 p-8 md:p-12 backdrop-blur shadow-[var(--shadow-card)]">
             <h1 className="font-serif text-4xl leading-tight tracking-tight md:text-5xl text-foreground mb-2">
               Terms of Use
             </h1>
@@ -181,7 +167,6 @@ function TermsOfUsePage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

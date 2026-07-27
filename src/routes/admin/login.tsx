@@ -1,12 +1,28 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, collection, query, limit, getDoc, getDocs, writeBatch, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  query,
+  limit,
+  getDoc,
+  getDocs,
+  writeBatch,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Heart, Lock, Mail, UserPlus, LogIn, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -53,7 +69,7 @@ function AdminLoginPage() {
         // Create atomic write batch for user and config (if first user)
         const batch = writeBatch(db);
         const userDocRef = doc(db, "admins", user.uid);
-        
+
         batch.set(userDocRef, {
           uid: user.uid,
           email: user.email || email.trim(),
@@ -74,7 +90,9 @@ function AdminLoginPage() {
         await batch.commit();
 
         if (isFirstUser) {
-          toast.success("Registration successful! You are the first user and have been approved as Admin.");
+          toast.success(
+            "Registration successful! You are the first user and have been approved as Admin.",
+          );
           navigate({ to: "/admin", replace: true });
         } else {
           toast.success("Registration request submitted! Please wait for admin approval.");
@@ -102,9 +120,15 @@ function AdminLoginPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4 py-12 md:py-24">
       {/* Visual background decorations */}
-      <div className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-      <div className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-primary/15 blur-3xl" aria-hidden />
-      
+      <div
+        className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-primary/15 blur-3xl"
+        aria-hidden
+      />
+
       {/* Floating ambient hearts */}
       <div className="pointer-events-none absolute top-12 left-12 animate-float text-primary/10">
         <Heart className="h-10 w-10 fill-current" />
@@ -127,7 +151,7 @@ function AdminLoginPage() {
               : "Register to request administrator privileges"}
           </CardDescription>
         </CardHeader>
-        
+
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -146,7 +170,7 @@ function AdminLoginPage() {
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -166,12 +190,7 @@ function AdminLoginPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-4">
-            <Button
-              type="submit"
-              variant="crush"
-              className="w-full font-medium"
-              disabled={loading}
-            >
+            <Button type="submit" variant="crush" className="w-full font-medium" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -198,9 +217,7 @@ function AdminLoginPage() {
               }}
               disabled={loading}
             >
-              {isLogin
-                ? "Don't have an account? Register"
-                : "Already registered? Sign In"}
+              {isLogin ? "Don't have an account? Register" : "Already registered? Sign In"}
             </button>
           </CardFooter>
         </form>

@@ -8,14 +8,20 @@ export const Route = createFileRoute("/contact-us")({
   head: () => ({
     meta: [
       { title: "Contact Us — Secret Crush by ARCTURYN PRIVATE LIMITED" },
-      { name: "description", content: "Contact ARCTURYN PRIVATE LIMITED in Ahmedabad, India for Secret Crush support, corporate inquiries, and official support." },
+      {
+        name: "description",
+        content:
+          "Contact ARCTURYN PRIVATE LIMITED in Ahmedabad, India for Secret Crush support, corporate inquiries, and official support.",
+      },
       { property: "og:title", content: "Contact Us — Secret Crush by ARCTURYN PRIVATE LIMITED" },
-      { property: "og:description", content: "Contact ARCTURYN PRIVATE LIMITED in Ahmedabad, India for Secret Crush support and inquiries." },
+      {
+        property: "og:description",
+        content:
+          "Contact ARCTURYN PRIVATE LIMITED in Ahmedabad, India for Secret Crush support and inquiries.",
+      },
       { property: "og:url", content: "https://mysecretcrush.in/contact-us" },
     ],
-    links: [
-      { rel: "canonical", href: "https://mysecretcrush.in/contact-us" },
-    ],
+    links: [{ rel: "canonical", href: "https://mysecretcrush.in/contact-us" }],
   }),
   component: ContactUsPage,
 });
@@ -27,8 +33,14 @@ function ContactUsPage() {
       <Navbar />
       <main className="relative pt-32 pb-24 md:pt-40 md:pb-32 px-6">
         {/* Decorative blurred background */}
-        <div className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute top-40 right-10 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.88_0.09_25)]/20 blur-3xl" aria-hidden />
+        <div
+          className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute top-40 right-10 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.88_0.09_25)]/20 blur-3xl"
+          aria-hidden
+        />
 
         <div className="relative mx-auto max-w-4xl">
           {/* Back button */}
@@ -50,7 +62,9 @@ function ContactUsPage() {
                 Contact Us
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed">
-                Have questions about Secret Crush, business partnerships, or compliance inquiries? Feel free to reach out to our legal operating entity <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong>.
+                Have questions about Secret Crush, business partnerships, or compliance inquiries?
+                Feel free to reach out to our legal operating entity{" "}
+                <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong>.
               </p>
             </div>
 
@@ -79,7 +93,9 @@ function ContactUsPage() {
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-foreground">Phone Support</h3>
+                    <h3 className="font-serif text-lg font-medium text-foreground">
+                      Phone Support
+                    </h3>
                     <p className="text-xs text-muted-foreground">Mon–Fri 10:00 AM – 6:00 PM IST</p>
                   </div>
                 </div>
@@ -88,9 +104,7 @@ function ContactUsPage() {
                     +91 9978333880
                   </a>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Official registered contact number
-                </p>
+                <p className="text-xs text-muted-foreground">Official registered contact number</p>
               </div>
 
               <div className="rounded-2xl border border-border/60 bg-background/60 p-6 space-y-4 md:col-span-2">
@@ -99,13 +113,17 @@ function ContactUsPage() {
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-foreground">Registered Office Address</h3>
+                    <h3 className="font-serif text-lg font-medium text-foreground">
+                      Registered Office Address
+                    </h3>
                     <p className="text-xs text-muted-foreground">Official Headquarters</p>
                   </div>
                 </div>
                 <div className="text-sm leading-relaxed text-foreground font-medium">
-                  ARCTURYN PRIVATE LIMITED<br />
-                  411, 4th Floor, SHREEYA AMALGA, Thaltej Road,<br />
+                  ARCTURYN PRIVATE LIMITED
+                  <br />
+                  411, 4th Floor, SHREEYA AMALGA, Thaltej Road,
+                  <br />
                   Ahmedabad, Gujarat, India 380054
                 </div>
               </div>
@@ -116,14 +134,19 @@ function ContactUsPage() {
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-foreground">Email Communications</h3>
+                    <h3 className="font-serif text-lg font-medium text-foreground">
+                      Email Communications
+                    </h3>
                     <p className="text-xs text-muted-foreground">For support & legal compliance</p>
                   </div>
                 </div>
                 <div className="grid gap-2 sm:grid-cols-2 text-sm">
                   <div>
                     <span className="text-xs text-muted-foreground">General Support: </span>
-                    <a href="mailto:info@mysecretcrush.in" className="text-primary font-medium hover:underline">
+                    <a
+                      href="mailto:info@mysecretcrush.in"
+                      className="text-primary font-medium hover:underline"
+                    >
                       info@mysecretcrush.in
                     </a>
                   </div>
@@ -136,7 +159,9 @@ function ContactUsPage() {
                     <Instagram className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-foreground">Official Instagram Page</h3>
+                    <h3 className="font-serif text-lg font-medium text-foreground">
+                      Official Instagram Page
+                    </h3>
                     <p className="text-xs text-muted-foreground">Connect with us on social media</p>
                   </div>
                 </div>

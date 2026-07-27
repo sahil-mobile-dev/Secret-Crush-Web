@@ -1,7 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Clock, LogOut, Heart, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -54,8 +61,14 @@ function AdminPendingPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4 py-12">
       {/* Decorative blurred blobs */}
-      <div className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-      <div className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-primary/15 blur-3xl" aria-hidden />
+      <div
+        className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-primary/15 blur-3xl"
+        aria-hidden
+      />
 
       {/* Floating ambient hearts */}
       <div className="pointer-events-none absolute top-16 right-16 animate-float text-primary/10">
@@ -77,19 +90,20 @@ function AdminPendingPage() {
             {isRejected ? "Request Declined" : "Approval Pending"}
           </CardTitle>
           <CardDescription>
-            {isRejected 
-              ? "Your administrator request has been rejected" 
+            {isRejected
+              ? "Your administrator request has been rejected"
               : "Your account is currently waiting for administrator review"}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {isRejected ? (
             <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-5 text-left text-sm leading-relaxed text-muted-foreground animate-fade-in">
               <p className="font-medium text-red-600 mb-1">What does this mean?</p>
               <p>
-                An administrator reviewed and declined your request for admin privileges.
-                If you believe this was a mistake, or if your context has changed, you can resubmit a new request for approval.
+                An administrator reviewed and declined your request for admin privileges. If you
+                believe this was a mistake, or if your context has changed, you can resubmit a new
+                request for approval.
               </p>
               {userData?.email && (
                 <p className="mt-3 text-xs border-t border-red-500/10 pt-2 text-primary font-medium">
@@ -102,7 +116,8 @@ function AdminPendingPage() {
               <p className="font-medium text-foreground mb-1">What happens next?</p>
               <p>
                 An existing system administrator must review and accept your registration request.
-                Once they approve your request, you will automatically be granted access to the Admin Panel.
+                Once they approve your request, you will automatically be granted access to the
+                Admin Panel.
               </p>
               {userData?.email && (
                 <p className="mt-3 text-xs border-t border-amber-500/10 pt-2 text-primary font-medium">

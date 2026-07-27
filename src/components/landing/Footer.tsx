@@ -13,25 +13,40 @@ export function Footer() {
         </Link>
 
         <nav className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-          <Link to="/about-us" className="transition-colors hover:text-primary">About Us</Link>
-          <Link to="/contact-us" className="transition-colors hover:text-primary">Contact Us</Link>
-          <Link to="/privacy-policy" className="transition-colors hover:text-primary">Privacy Policy</Link>
-          <Link to="/terms-of-use" className="transition-colors hover:text-primary">Terms of Use</Link>
-          <Link to="/" hash="faq" className="transition-colors hover:text-primary">FAQ</Link>
+          <Link to="/about-us" className="transition-colors hover:text-primary">
+            About Us
+          </Link>
+          <Link to="/contact-us" className="transition-colors hover:text-primary">
+            Contact Us
+          </Link>
+          <Link to="/privacy-policy" className="transition-colors hover:text-primary">
+            Privacy Policy
+          </Link>
+          <Link to="/terms-of-use" className="transition-colors hover:text-primary">
+            Terms of Use
+          </Link>
+          <Link to="/" hash="faq" className="transition-colors hover:text-primary">
+            FAQ
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
-          <SocialIcon href="https://www.instagram.com/mysecretcrush.official/" ariaLabel="Instagram">
+          <SocialIcon
+            href="https://www.instagram.com/mysecretcrush.official/"
+            ariaLabel="Instagram"
+          >
             <Instagram className="h-4 w-4" />
           </SocialIcon>
         </div>
       </div>
       <div className="border-t border-border/40 py-6 px-6 text-center text-xs text-muted-foreground space-y-1.5">
         <p className="font-medium text-foreground/90">
-          Secret Crush is a brand owned and operated by <span className="font-semibold text-primary">ARCTURYN PRIVATE LIMITED</span>.
+          Secret Crush is a brand owned and operated by{" "}
+          <span className="font-semibold text-primary">ARCTURYN PRIVATE LIMITED</span>.
         </p>
         <p className="text-muted-foreground/80">
-          Registered Address: 411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054
+          Registered Address: 411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat,
+          India 380054
         </p>
         <p className="pt-1 text-muted-foreground/60">
           © {new Date().getFullYear()} ARCTURYN PRIVATE LIMITED. All rights reserved.
@@ -41,7 +56,15 @@ export function Footer() {
   );
 }
 
-function SocialIcon({ children, href = "#", ariaLabel }: { children: React.ReactNode; href?: string; ariaLabel?: string }) {
+function SocialIcon({
+  children,
+  href = "#",
+  ariaLabel,
+}: {
+  children: React.ReactNode;
+  href?: string;
+  ariaLabel?: string;
+}) {
   return (
     <a
       href={href}

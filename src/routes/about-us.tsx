@@ -8,14 +8,20 @@ export const Route = createFileRoute("/about-us")({
   head: () => ({
     meta: [
       { title: "About Us — Secret Crush by ARCTURYN PRIVATE LIMITED" },
-      { name: "description", content: "Learn about the Secret Crush by ARCTURYN PRIVATE LIMITED, the technology company behind Secret Crush based in Ahmedabad, India." },
+      {
+        name: "description",
+        content:
+          "Learn about the Secret Crush by ARCTURYN PRIVATE LIMITED, the technology company behind Secret Crush based in Ahmedabad, India.",
+      },
       { property: "og:title", content: "About Us — Secret Crush by ARCTURYN PRIVATE LIMITED" },
-      { property: "og:description", content: "Learn about Secret Crush by ARCTURYN PRIVATE LIMITED, the technology company behind Secret Crush based in Ahmedabad, India." },
+      {
+        property: "og:description",
+        content:
+          "Learn about Secret Crush by ARCTURYN PRIVATE LIMITED, the technology company behind Secret Crush based in Ahmedabad, India.",
+      },
       { property: "og:url", content: "https://mysecretcrush.in/about-us" },
     ],
-    links: [
-      { rel: "canonical", href: "https://mysecretcrush.in/about-us" },
-    ],
+    links: [{ rel: "canonical", href: "https://mysecretcrush.in/about-us" }],
   }),
   component: AboutUsPage,
 });
@@ -27,8 +33,14 @@ function AboutUsPage() {
       <Navbar />
       <main className="relative pt-32 pb-24 md:pt-40 md:pb-32 px-6">
         {/* Decorative background gradients */}
-        <div className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute top-40 right-10 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.88_0.09_25)]/20 blur-3xl" aria-hidden />
+        <div
+          className="pointer-events-none absolute -top-20 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute top-40 right-10 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.88_0.09_25)]/20 blur-3xl"
+          aria-hidden
+        />
 
         <div className="relative mx-auto max-w-4xl">
           {/* Back link */}
@@ -50,7 +62,11 @@ function AboutUsPage() {
                 About ARCTURYN PRIVATE LIMITED
               </h1>
               <p className="text-lg leading-relaxed text-muted-foreground">
-                <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong> is a technology company based in Ahmedabad, Gujarat, India. Our flagship digital platform, <strong className="font-semibold text-primary">Secret Crush</strong>, is designed to bring privacy, confidentiality, and authentic connections to digital social interactions.
+                <strong className="text-foreground">ARCTURYN PRIVATE LIMITED</strong> is a
+                technology company based in Ahmedabad, Gujarat, India. Our flagship digital
+                platform, <strong className="font-semibold text-primary">Secret Crush</strong>, is
+                designed to bring privacy, confidentiality, and authentic connections to digital
+                social interactions.
               </p>
             </div>
 
@@ -59,9 +75,14 @@ function AboutUsPage() {
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary">
                   <Heart className="h-5 w-5 fill-primary/20 text-primary" />
                 </div>
-                <h3 className="font-serif text-xl font-medium text-foreground">Our Flagship Brand</h3>
+                <h3 className="font-serif text-xl font-medium text-foreground">
+                  Our Flagship Brand
+                </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  <strong className="text-foreground">Secret Crush</strong> is a proprietary social connection platform that allows users to express interest in friends or acquaintances secretly. Connections are only revealed when interest is mutual (double-opt-in), maintaining zero rejection anxiety.
+                  <strong className="text-foreground">Secret Crush</strong> is a proprietary social
+                  connection platform that allows users to express interest in friends or
+                  acquaintances secretly. Connections are only revealed when interest is mutual
+                  (double-opt-in), maintaining zero rejection anxiety.
                 </p>
               </div>
 
@@ -69,40 +90,57 @@ function AboutUsPage() {
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary">
                   <ShieldCheck className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="font-serif text-xl font-medium text-foreground">Corporate Governance & Compliance</h3>
+                <h3 className="font-serif text-xl font-medium text-foreground">
+                  Corporate Governance & Compliance
+                </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Operating with absolute transparency and regulatory compliance, ARCTURYN PRIVATE LIMITED strictly adheres to data protection standards, user privacy guidelines, and Indian corporate law.
+                  Operating with absolute transparency and regulatory compliance, ARCTURYN PRIVATE
+                  LIMITED strictly adheres to data protection standards, user privacy guidelines,
+                  and Indian corporate law.
                 </p>
               </div>
             </div>
 
             <div className="border-t border-border/40 pt-8 space-y-6">
-              <h2 className="font-serif text-2xl text-foreground">Corporate Verification Information</h2>
+              <h2 className="font-serif text-2xl text-foreground">
+                Corporate Verification Information
+              </h2>
               <p className="text-sm text-muted-foreground">
-                For partners, regulatory bodies, and verification teams (including Meta Business Verification), here is our official business identification:
+                For partners, regulatory bodies, and verification teams (including Meta Business
+                Verification), here is our official business identification:
               </p>
 
               <div className="grid gap-4 sm:grid-cols-2 text-sm">
                 <div className="rounded-xl border border-border/40 bg-card/40 p-4 flex items-start gap-3">
                   <Building2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Legal Entity Name</div>
-                    <div className="font-semibold text-foreground mt-0.5">ARCTURYN PRIVATE LIMITED</div>
+                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                      Legal Entity Name
+                    </div>
+                    <div className="font-semibold text-foreground mt-0.5">
+                      ARCTURYN PRIVATE LIMITED
+                    </div>
                   </div>
                 </div>
 
                 <div className="rounded-xl border border-border/40 bg-card/40 p-4 flex items-start gap-3">
                   <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Business Type</div>
-                    <div className="font-semibold text-foreground mt-0.5">Private Limited Company</div>
+                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                      Business Type
+                    </div>
+                    <div className="font-semibold text-foreground mt-0.5">
+                      Private Limited Company
+                    </div>
                   </div>
                 </div>
 
                 <div className="rounded-xl border border-border/40 bg-card/40 p-4 flex items-start gap-3 sm:col-span-2">
                   <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Registered Office Address</div>
+                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                      Registered Office Address
+                    </div>
                     <div className="font-semibold text-foreground mt-0.5">
                       411, 4th Floor, SHREEYA AMALGA, Thaltej Road, Ahmedabad, Gujarat, India 380054
                     </div>
@@ -112,7 +150,9 @@ function AboutUsPage() {
                 <div className="rounded-xl border border-border/40 bg-card/40 p-4 flex items-start gap-3">
                   <Phone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Phone Contact</div>
+                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                      Phone Contact
+                    </div>
                     <div className="font-semibold text-foreground mt-0.5">+91 9978333880</div>
                   </div>
                 </div>
@@ -120,8 +160,12 @@ function AboutUsPage() {
                 <div className="rounded-xl border border-border/40 bg-card/40 p-4 flex items-start gap-3">
                   <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Official Email</div>
-                    <div className="font-semibold text-foreground mt-0.5">info@mysecretcrush.in</div>
+                    <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                      Official Email
+                    </div>
+                    <div className="font-semibold text-foreground mt-0.5">
+                      info@mysecretcrush.in
+                    </div>
                   </div>
                 </div>
               </div>

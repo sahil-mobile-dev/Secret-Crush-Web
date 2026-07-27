@@ -47,7 +47,7 @@ function AdminLayout() {
         {/* Decorative ambient glow */}
         <div className="pointer-events-none absolute -top-20 -left-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -right-10 h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
-        
+
         <div className="animate-pulse-soft font-serif text-3xl text-primary tracking-wide">
           Secret Crush
         </div>
@@ -74,7 +74,10 @@ function AdminLayout() {
     if ((userData.status === "pending" || userData.status === "rejected") && !isPendingPath) {
       return null;
     }
-    if ((userData.status === "approved" || userData.role === "admin") && (isLoginPath || isPendingPath)) {
+    if (
+      (userData.status === "approved" || userData.role === "admin") &&
+      (isLoginPath || isPendingPath)
+    ) {
       return null;
     }
   }

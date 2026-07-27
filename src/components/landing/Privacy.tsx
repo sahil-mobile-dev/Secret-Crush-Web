@@ -32,7 +32,8 @@ export function Privacy() {
             We keep it private
           </p>
           <h2 className="font-serif text-4xl leading-tight tracking-tight md:text-5xl">
-            Some feelings are better left secret…<br />
+            Some feelings are better left secret…
+            <br />
             unless they're <span className="italic text-primary">mutual.</span>
           </h2>
         </div>
