@@ -63,6 +63,11 @@ import {
   Calendar,
   Sparkles,
   Pencil,
+  Copy,
+  Eye,
+  FileJson,
+  HeartHandshake,
+  Filter,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -168,12 +173,58 @@ interface WaitlistRecord {
   timestamp: any;
 }
 
+interface CrushRecord {
+  id: string;
+  fromUserId?: string;
+  toUserId?: string | null;
+  targetPhone?: string;
+  normalizedPhone?: string;
+  targetName?: string;
+  crushName?: string;
+  status?: string;
+  revealed?: boolean;
+  createdAt?: any;
+  updatedAt?: any;
+  [key: string]: any;
+}
+
+interface MatchRecord {
+  id: string;
+  users?: string[];
+  crushId?: string | null;
+  user1Id?: string;
+  user2Id?: string;
+  status?: string;
+  createdAt?: any;
+  matchedAt?: any;
+  updatedAt?: any;
+  [key: string]: any;
+}
+
 function AdminDashboardPage() {
   const { user, userData, logout } = useAuth();
   const navigate = useNavigate();
 
   // Selected tab state
-  const [activeTab, setActiveTab] = useState<"dashboard" | "waitlist" | "contests">("dashboard");
+  const [activeTab, setActiveTab] = useState<
+    "dashboard" | "crushes" | "matches" | "waitlist" | "contests"
+  >("dashboard");
+
+  // Real-time crushes and matches lists
+  const [crushesList, setCrushesList] = useState<CrushRecord[]>([]);
+  const [matchesList, setMatchesList] = useState<MatchRecord[]>([]);
+
+  // Search & Filter states for crushes and matches
+  const [crushesSearch, setCrushesSearch] = useState("");
+  const [matchesSearch, setMatchesSearch] = useState("");
+  const [crushesStatusFilter, setCrushesStatusFilter] = useState<string>("all");
+  const [matchesStatusFilter, setMatchesStatusFilter] = useState<string>("all");
+
+  // Raw data inspection modal state
+  const [selectedRawDoc, setSelectedRawDoc] = useState<{
+    type: "Crush" | "Match";
+    data: Record<string, any>;
+  } | null>(null);
 
   // Contests list states
   const [contests, setContests] = useState<ContestRecord[]>([]);
@@ -477,12 +528,54 @@ function AdminDashboardPage() {
       },
     );
 
+    // 6. Subscribe to crushes collection
+    const crushesColl = collection(db, "crushes");
+    const unsubCrushes = onSnapshot(
+      crushesColl,
+      (snapshot) => {
+        const list: CrushRecord[] = [];
+        snapshot.forEach((doc) => {
+          list.push({ id: doc.id, ...(doc.data() as Omit<CrushRecord, "id">) });
+        });
+        list.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        setCrushesList(list);
+        setCrushesCount(list.length);
+      },
+      (error) => {
+        console.error("Crushes subscription error:", error);
+      },
+    );
+
+    // 7. Subscribe to matches collection
+    const matchesColl = collection(db, "matches");
+    const unsubMatches = onSnapshot(
+      matchesColl,
+      (snapshot) => {
+        const list: MatchRecord[] = [];
+        snapshot.forEach((doc) => {
+          list.push({ id: doc.id, ...(doc.data() as Omit<MatchRecord, "id">) });
+        });
+        list.sort(
+          (a, b) =>
+            (b.createdAt?.seconds || b.matchedAt?.seconds || 0) -
+            (a.createdAt?.seconds || a.matchedAt?.seconds || 0),
+        );
+        setMatchesList(list);
+        setMatchesCount(list.length);
+      },
+      (error) => {
+        console.error("Matches subscription error:", error);
+      },
+    );
+
     return () => {
       unsubAdmins();
       unsubUsers();
       unsubReferrals();
       unsubWaitlist();
       unsubContests();
+      unsubCrushes();
+      unsubMatches();
     };
   }, []);
 
@@ -588,6 +681,85 @@ function AdminDashboardPage() {
       toast.error("Failed to log out.");
     }
   };
+
+  // Helper lookup: find user details by UID or phone number
+  const findUserByUidOrPhone = (identifier?: string | null) => {
+    if (!identifier) return null;
+    const cleanIdentifier = identifier.trim().toLowerCase();
+    return (
+      appUsers.find((u) => {
+        const uidMatches = u.uid && u.uid.toLowerCase() === cleanIdentifier;
+        const phoneMatches =
+          (u.phone && u.phone.toLowerCase() === cleanIdentifier) ||
+          (u.phoneNumber && u.phoneNumber.toLowerCase() === cleanIdentifier) ||
+          (u.normalizedPhone && u.normalizedPhone.toLowerCase() === cleanIdentifier);
+        return uidMatches || phoneMatches;
+      }) || null
+    );
+  };
+
+  const copyToClipboard = (text: string, label: string = "ID") => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied to clipboard!`);
+  };
+
+  // Filtered crushes list based on search and status
+  const filteredCrushes = crushesList.filter((c) => {
+    const currentStatus = (c.status || "pending").toLowerCase();
+    if (crushesStatusFilter !== "all" && currentStatus !== crushesStatusFilter) {
+      return false;
+    }
+
+    const term = crushesSearch.toLowerCase().trim();
+    if (!term) return true;
+
+    const senderUser = findUserByUidOrPhone(c.fromUserId);
+    const recipientUser = findUserByUidOrPhone(c.toUserId || c.normalizedPhone || c.targetPhone);
+
+    return (
+      (c.id || "").toLowerCase().includes(term) ||
+      (c.fromUserId || "").toLowerCase().includes(term) ||
+      (c.toUserId || "").toLowerCase().includes(term) ||
+      (c.targetPhone || c.normalizedPhone || "").toLowerCase().includes(term) ||
+      (c.targetName || c.crushName || "").toLowerCase().includes(term) ||
+      currentStatus.includes(term) ||
+      (senderUser?.name || "").toLowerCase().includes(term) ||
+      (senderUser?.phone || senderUser?.phoneNumber || "").toLowerCase().includes(term) ||
+      (senderUser?.email || "").toLowerCase().includes(term) ||
+      (recipientUser?.name || "").toLowerCase().includes(term) ||
+      (recipientUser?.phone || recipientUser?.phoneNumber || "").toLowerCase().includes(term)
+    );
+  });
+
+  // Filtered matches list based on search and status
+  const filteredMatches = matchesList.filter((m) => {
+    const currentStatus = (m.status || "matched").toLowerCase();
+    if (matchesStatusFilter !== "all" && currentStatus !== matchesStatusFilter) {
+      return false;
+    }
+
+    const term = matchesSearch.toLowerCase().trim();
+    if (!term) return true;
+
+    const user1Id = m.users?.[0] || m.user1Id;
+    const user2Id = m.users?.[1] || m.user2Id;
+    const user1 = findUserByUidOrPhone(user1Id);
+    const user2 = findUserByUidOrPhone(user2Id);
+
+    return (
+      (m.id || "").toLowerCase().includes(term) ||
+      (m.crushId || "").toLowerCase().includes(term) ||
+      currentStatus.includes(term) ||
+      (m.users || []).some((uId: string) => uId.toLowerCase().includes(term)) ||
+      (user1?.name || "").toLowerCase().includes(term) ||
+      (user1?.phone || user1?.phoneNumber || "").toLowerCase().includes(term) ||
+      (user1?.email || "").toLowerCase().includes(term) ||
+      (user2?.name || "").toLowerCase().includes(term) ||
+      (user2?.phone || user2?.phoneNumber || "").toLowerCase().includes(term) ||
+      (user2?.email || "").toLowerCase().includes(term)
+    );
+  });
 
   // Helper lookup: find user's referrer name
   const findReferrerName = (code: string | null | undefined) => {
@@ -785,6 +957,28 @@ function AdminDashboardPage() {
             Dashboard Overview
           </button>
           <button
+            onClick={() => setActiveTab("crushes")}
+            className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "crushes"
+                ? "bg-primary text-primary-foreground shadow"
+                : "bg-secondary/40 text-muted-foreground hover:bg-secondary/70"
+            }`}
+          >
+            <Heart className="h-3.5 w-3.5 fill-current" />
+            Crushes Checklist ({crushesList.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("matches")}
+            className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "matches"
+                ? "bg-primary text-primary-foreground shadow"
+                : "bg-secondary/40 text-muted-foreground hover:bg-secondary/70"
+            }`}
+          >
+            <HeartHandshake className="h-3.5 w-3.5" />
+            Confirmed Matches ({matchesList.length})
+          </button>
+          <button
             onClick={() => setActiveTab("waitlist")}
             className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === "waitlist"
@@ -824,7 +1018,10 @@ function AdminDashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur">
+              <Card
+                onClick={() => setActiveTab("crushes")}
+                className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur cursor-pointer hover:border-primary/50 transition-all hover:shadow-md"
+              >
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
                     Crushes Added
@@ -835,22 +1032,31 @@ function AdminDashboardPage() {
                   <div className="text-3xl font-bold tracking-tight">
                     {crushesCount !== null ? crushesCount.toLocaleString() : "..."}
                   </div>
-                  <p className="mt-1 text-[10px] text-muted-foreground">Crushes sent secretly</p>
+                  <p className="mt-1 text-[10px] text-muted-foreground flex items-center justify-between">
+                    <span>Crushes sent secretly</span>
+                    <span className="font-semibold text-primary">View &rarr;</span>
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur">
+              <Card
+                onClick={() => setActiveTab("matches")}
+                className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur cursor-pointer hover:border-emerald-500/50 transition-all hover:shadow-md"
+              >
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
                     Matches Found
                   </CardTitle>
-                  <RefreshCw className="h-4 w-4 text-emerald-500" />
+                  <HeartHandshake className="h-4 w-4 text-emerald-500" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold tracking-tight">
                     {matchesCount !== null ? matchesCount.toLocaleString() : "..."}
                   </div>
-                  <p className="mt-1 text-[10px] text-muted-foreground">Mutual crushes matching</p>
+                  <p className="mt-1 text-[10px] text-muted-foreground flex items-center justify-between">
+                    <span>Mutual crushes matching</span>
+                    <span className="font-semibold text-emerald-600">View &rarr;</span>
+                  </p>
                 </CardContent>
               </Card>
 
@@ -1343,6 +1549,366 @@ function AdminDashboardPage() {
                 </div>
               </Card>
             </section>
+          </div>
+        )}
+
+        {/* Tab 2: Crushes Checklist */}
+        {activeTab === "crushes" && (
+          <div className="space-y-6 animate-fade-up">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Heart className="h-6 w-6 text-primary fill-current" />
+                  <h2 className="font-serif text-2xl font-medium tracking-tight text-foreground">
+                    Crushes Checklist
+                  </h2>
+                  <Badge variant="secondary" className="font-bold bg-primary/10 text-primary border-none">
+                    {crushesList.length} Total
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Complete list of secret crush declarations submitted by app users. Inspect full document details for error tracking.
+                </p>
+              </div>
+
+              {/* Quick stats mini-pills */}
+              <div className="flex flex-wrap gap-2 text-xs">
+                <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20">
+                  Pending: {crushesList.filter((c) => (c.status || "pending") === "pending").length}
+                </Badge>
+                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                  Matched: {crushesList.filter((c) => c.status === "matched").length}
+                </Badge>
+                <Badge variant="outline" className="bg-purple-500/10 text-purple-600 border-purple-500/20">
+                  Revealed: {crushesList.filter((c) => c.revealed === true).length}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Filter and Search controls */}
+            <Card className="border-border/60 bg-card/40 p-4 backdrop-blur-md">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by Crush ID, Sender Name/Phone/UID, Target Phone/Name..."
+                    value={crushesSearch}
+                    onChange={(e) => setCrushesSearch(e.target.value)}
+                    className="pl-9 text-xs"
+                  />
+                </div>
+                <div className="w-full sm:w-48">
+                  <Select value={crushesStatusFilter} onValueChange={setCrushesStatusFilter}>
+                    <SelectTrigger className="text-xs h-9">
+                      <div className="flex items-center gap-1.5">
+                        <Filter className="h-3.5 w-3.5 text-muted-foreground" />
+                        <SelectValue placeholder="Filter by status" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="matched">Matched</SelectItem>
+                      <SelectItem value="revealed">Revealed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </Card>
+
+            {/* Crushes Table */}
+            <Card className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="bg-secondary/30">
+                    <TableRow>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Crush ID</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Sender (From)</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Target (To)</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Status</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Revealed</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Date Sent</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider text-right">Raw Data</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCrushes.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-10 text-xs text-muted-foreground">
+                          {crushesSearch || crushesStatusFilter !== "all"
+                            ? "No crushes match your search/filter criteria."
+                            : "No crush entries found in database."}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredCrushes.map((crush) => {
+                        const senderUser = findUserByUidOrPhone(crush.fromUserId);
+                        const recipientUser = findUserByUidOrPhone(
+                          crush.toUserId || crush.normalizedPhone || crush.targetPhone
+                        );
+                        const isMatched = crush.status === "matched";
+                        const isRevealed = crush.revealed === true;
+
+                        return (
+                          <TableRow key={crush.id} className="hover:bg-secondary/20 transition-colors">
+                            <TableCell className="font-mono text-[11px]">
+                              <div className="flex items-center gap-1">
+                                <span className="truncate max-w-[90px]" title={crush.id}>
+                                  {crush.id}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                                  onClick={() => copyToClipboard(crush.id, "Crush ID")}
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {senderUser ? (
+                                <div>
+                                  <p className="font-semibold text-xs text-foreground">{senderUser.name}</p>
+                                  <p className="text-[10px] text-muted-foreground">
+                                    {senderUser.phone || senderUser.phoneNumber || senderUser.normalizedPhone || "No Phone"}
+                                  </p>
+                                </div>
+                              ) : (
+                                <div>
+                                  <p className="font-mono text-xs text-muted-foreground truncate max-w-[120px]" title={crush.fromUserId}>
+                                    UID: {crush.fromUserId || "Unknown"}
+                                  </p>
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="font-semibold text-xs text-foreground">
+                                  {crush.targetName || crush.crushName || recipientUser?.name || "Secret Crush"}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground font-mono">
+                                  {crush.targetPhone || crush.normalizedPhone || recipientUser?.phone || "No Phone"}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                className={
+                                  isMatched
+                                    ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-bold"
+                                    : "bg-amber-500/10 text-amber-600 border-amber-500/20 font-bold"
+                                }
+                              >
+                                {crush.status || "pending"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant="outline"
+                                className={
+                                  isRevealed
+                                    ? "bg-purple-500/10 text-purple-600 border-purple-500/20"
+                                    : "bg-secondary text-muted-foreground"
+                                }
+                              >
+                                {isRevealed ? "Yes (Revealed)" : "No (Hidden)"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-xs text-muted-foreground">
+                              {formatDate(crush.createdAt)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs gap-1 text-primary hover:bg-primary/10"
+                                onClick={() => setSelectedRawDoc({ type: "Crush", data: crush })}
+                              >
+                                <Eye className="h-3.5 w-3.5" />
+                                Inspect
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Tab 3: Confirmed Matches Checklist */}
+        {activeTab === "matches" && (
+          <div className="space-y-6 animate-fade-up">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <HeartHandshake className="h-6 w-6 text-emerald-500" />
+                  <h2 className="font-serif text-2xl font-medium tracking-tight text-foreground">
+                    Confirmed Matches Checklist
+                  </h2>
+                  <Badge variant="secondary" className="font-bold bg-emerald-500/10 text-emerald-600 border-none">
+                    {matchesList.length} Total
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  List of mutual secret crush matches confirmed between app users. Inspect detailed parameters for error tracing.
+                </p>
+              </div>
+            </div>
+
+            {/* Filter and Search controls */}
+            <Card className="border-border/60 bg-card/40 p-4 backdrop-blur-md">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by Match ID, User 1/User 2 Name, Phone, UID..."
+                    value={matchesSearch}
+                    onChange={(e) => setMatchesSearch(e.target.value)}
+                    className="pl-9 text-xs"
+                  />
+                </div>
+                <div className="w-full sm:w-48">
+                  <Select value={matchesStatusFilter} onValueChange={setMatchesStatusFilter}>
+                    <SelectTrigger className="text-xs h-9">
+                      <div className="flex items-center gap-1.5">
+                        <Filter className="h-3.5 w-3.5 text-muted-foreground" />
+                        <SelectValue placeholder="Filter by status" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="matched">Matched</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="confirmed">Confirmed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </Card>
+
+            {/* Matches Table */}
+            <Card className="border-border/60 bg-card/60 shadow-[var(--shadow-card)] backdrop-blur">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="bg-secondary/30">
+                    <TableRow>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Match ID</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Matched User Pair</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Linked Crush ID</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Status</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider">Matched Date</TableHead>
+                      <TableHead className="text-[10px] uppercase font-bold tracking-wider text-right">Raw Data</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredMatches.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-10 text-xs text-muted-foreground">
+                          {matchesSearch || matchesStatusFilter !== "all"
+                            ? "No matches match your search/filter criteria."
+                            : "No confirmed matches found in database."}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredMatches.map((match) => {
+                        const user1Id = match.users?.[0] || match.user1Id;
+                        const user2Id = match.users?.[1] || match.user2Id;
+                        const user1 = findUserByUidOrPhone(user1Id);
+                        const user2 = findUserByUidOrPhone(user2Id);
+
+                        return (
+                          <TableRow key={match.id} className="hover:bg-secondary/20 transition-colors">
+                            <TableCell className="font-mono text-[11px]">
+                              <div className="flex items-center gap-1">
+                                <span className="truncate max-w-[90px]" title={match.id}>
+                                  {match.id}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                                  onClick={() => copyToClipboard(match.id, "Match ID")}
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-3">
+                                {/* User 1 */}
+                                <div>
+                                  <p className="font-semibold text-xs text-foreground">
+                                    {user1?.name || "User 1"}
+                                  </p>
+                                  <p className="text-[10px] text-muted-foreground font-mono">
+                                    {user1?.phone || user1?.phoneNumber || user1Id || "N/A"}
+                                  </p>
+                                </div>
+                                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+                                  <Heart className="h-3.5 w-3.5 fill-current" />
+                                </div>
+                                {/* User 2 */}
+                                <div>
+                                  <p className="font-semibold text-xs text-foreground">
+                                    {user2?.name || "User 2"}
+                                  </p>
+                                  <p className="text-[10px] text-muted-foreground font-mono">
+                                    {user2?.phone || user2?.phoneNumber || user2Id || "N/A"}
+                                  </p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-mono text-[11px]">
+                              {match.crushId ? (
+                                <div className="flex items-center gap-1">
+                                  <span className="truncate max-w-[80px]" title={match.crushId}>
+                                    {match.crushId}
+                                  </span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
+                                    onClick={() => copyToClipboard(match.crushId!, "Crush ID")}
+                                  >
+                                    <Copy className="h-2.5 w-2.5" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">None</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-bold">
+                                {match.status || "matched"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-xs text-muted-foreground">
+                              {formatDate(match.createdAt || match.matchedAt)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs gap-1 text-emerald-600 hover:bg-emerald-500/10"
+                                onClick={() => setSelectedRawDoc({ type: "Match", data: match })}
+                              >
+                                <Eye className="h-3.5 w-3.5" />
+                                Inspect
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </Card>
           </div>
         )}
 
@@ -2163,6 +2729,91 @@ function AdminDashboardPage() {
               </Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Raw Data Document Inspector Dialog */}
+      <Dialog open={selectedRawDoc !== null} onOpenChange={(open) => !open && setSelectedRawDoc(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto border-border/60 bg-card/95 backdrop-blur-xl">
+          {selectedRawDoc && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center justify-between pr-6">
+                  <div className="flex items-center gap-2">
+                    <FileJson className="h-5 w-5 text-primary" />
+                    <DialogTitle className="text-lg font-serif">
+                      {selectedRawDoc.type} Document Details
+                    </DialogTitle>
+                  </div>
+                  <Badge variant="outline" className="font-mono text-xs">
+                    ID: {selectedRawDoc.data.id}
+                  </Badge>
+                </div>
+                <DialogDescription className="text-xs">
+                  Complete document breakdown and raw JSON payload for error diagnosis and update tracking.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4 pt-2">
+                {/* Formatted Field Summary */}
+                <div className="rounded-xl border border-border/40 bg-secondary/15 p-4 space-y-2.5">
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                    Parsed Document Fields
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    {Object.entries(selectedRawDoc.data).map(([key, val]) => {
+                      let displayVal = "";
+                      if (val === null || val === undefined) displayVal = "null";
+                      else if (typeof val === "object" && val !== null && "seconds" in val) {
+                        displayVal = formatDate(val);
+                      } else if (typeof val === "object") {
+                        displayVal = JSON.stringify(val);
+                      } else {
+                        displayVal = String(val);
+                      }
+
+                      return (
+                        <div key={key} className="bg-card/60 p-2.5 rounded-lg border border-border/30">
+                          <span className="text-[10px] font-mono uppercase text-muted-foreground block">
+                            {key}
+                          </span>
+                          <span className="font-semibold font-mono text-xs break-all text-foreground">
+                            {displayVal}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Raw JSON Block */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Raw JSON Output
+                    </span>
+                    <Button
+                      variant="softOutline"
+                      size="sm"
+                      className="h-7 text-xs gap-1"
+                      onClick={() =>
+                        copyToClipboard(
+                          JSON.stringify(selectedRawDoc.data, null, 2),
+                          `${selectedRawDoc.type} JSON`
+                        )
+                      }
+                    >
+                      <Copy className="h-3 w-3" />
+                      Copy JSON
+                    </Button>
+                  </div>
+                  <pre className="p-4 rounded-xl bg-slate-950 text-slate-100 font-mono text-xs overflow-x-auto border border-border/50 max-h-60">
+                    {JSON.stringify(selectedRawDoc.data, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
