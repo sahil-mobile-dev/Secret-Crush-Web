@@ -4,6 +4,7 @@ import { Landing } from "@/components/landing/Landing";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { name: "facebook-domain-verification", content: "c54js1x1endfxluryolaouz9n2zluq" },
       {
         title: "Secret Crush — Add Crushes Secretly | Mutual Match App by ARCTURYN PRIVATE LIMITED",
       },

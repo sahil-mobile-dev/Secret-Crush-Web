@@ -73,6 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "facebook-domain-verification", content: "c54js1x1endfxluryolaouz9n2zluq" },
       { title: "Secret Crush — Your Crush. Still a Secret. | Official Site" },
       {
         name: "description",
@@ -214,6 +215,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <meta name="facebook-domain-verification" content="c54js1x1endfxluryolaouz9n2zluq" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
